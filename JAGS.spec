@@ -4,7 +4,7 @@
 #
 Name     : JAGS
 Version  : 4.3.0
-Release  : 1
+Release  : 2
 URL      : https://sourceforge.net/projects/mcmc-jags/files/JAGS/4.x/Source/JAGS-4.3.0.tar.gz
 Source0  : https://sourceforge.net/projects/mcmc-jags/files/JAGS/4.x/Source/JAGS-4.3.0.tar.gz
 Summary  : Bayesian hierarchical models using Markov Chain Monte Carlo (MCMC) simulation

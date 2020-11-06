@@ -4,10 +4,10 @@
 #
 Name     : JAGS
 Version  : 4.3.0
-Release  : 2
+Release  : 3
 URL      : https://sourceforge.net/projects/mcmc-jags/files/JAGS/4.x/Source/JAGS-4.3.0.tar.gz
 Source0  : https://sourceforge.net/projects/mcmc-jags/files/JAGS/4.x/Source/JAGS-4.3.0.tar.gz
-Summary  : Bayesian hierarchical models using Markov Chain Monte Carlo (MCMC) simulation
+Summary  : JAGS library for Bayesian modelling using MCMC
 Group    : Development/Tools
 License  : GPL-2.0 LGPL-2.1
 Requires: JAGS-bin = %{version}-%{release}
@@ -22,24 +22,14 @@ BuildRequires : openblas-dev
 BuildRequires : pkgconfig(cppunit)
 
 %description
-This is GNU libltdl, a system independent dlopen wrapper for GNU libtool.
-It supports the following dlopen interfaces:
-* dlopen (POSIX)
-* shl_load (HP-UX)
-* LoadLibrary (Win16 and Win32)
-* load_add_on (BeOS)
-* GNU DLD (emulates dynamic linking for static libraries)
-* dyld (darwin/Mac OS X)
-* libtool's dlpreopen
---
-Written by Thomas Tanner, 1999
+This is JAGS (Just Another Gibbs Sampler), a program for analysis of
+Bayesian Graphical models by Gibbs Sampling.
 
 %package bin
 Summary: bin components for the JAGS package.
 Group: Binaries
 Requires: JAGS-libexec = %{version}-%{release}
 Requires: JAGS-license = %{version}-%{release}
-Requires: JAGS-man = %{version}-%{release}
 
 %description bin
 bin components for the JAGS package.
@@ -94,38 +84,44 @@ man components for the JAGS package.
 
 %prep
 %setup -q -n JAGS-4.3.0
+cd %{_builddir}/JAGS-4.3.0
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
-export SOURCE_DATE_EPOCH=1550851588
+export LANG=C.UTF-8
+export SOURCE_DATE_EPOCH=1604622638
+export GCC_IGNORE_WERROR=1
+export CFLAGS="$CFLAGS -fno-lto "
+export FCFLAGS="$FFLAGS -fno-lto "
+export FFLAGS="$FFLAGS -fno-lto "
+export CXXFLAGS="$CXXFLAGS -fno-lto "
 %configure --disable-static --with-blas=openblas
 make  %{?_smp_mflags}
 
 %check
-export LANG=C
+export LANG=C.UTF-8
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-make VERBOSE=1 V=1 %{?_smp_mflags} check
+make %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1550851588
+export SOURCE_DATE_EPOCH=1604622638
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/JAGS
-cp COPYING %{buildroot}/usr/share/package-licenses/JAGS/COPYING
-cp libltdl/COPYING.LIB %{buildroot}/usr/share/package-licenses/JAGS/libltdl_COPYING.LIB
-cp src/modules/glm/SSparse/CHOLMOD/Check/License.txt %{buildroot}/usr/share/package-licenses/JAGS/src_modules_glm_SSparse_CHOLMOD_Check_License.txt
-cp src/modules/glm/SSparse/CHOLMOD/Cholesky/License.txt %{buildroot}/usr/share/package-licenses/JAGS/src_modules_glm_SSparse_CHOLMOD_Cholesky_License.txt
-cp src/modules/glm/SSparse/CHOLMOD/Core/License.txt %{buildroot}/usr/share/package-licenses/JAGS/src_modules_glm_SSparse_CHOLMOD_Core_License.txt
-cp src/modules/glm/SSparse/CHOLMOD/MatrixOps/License.txt %{buildroot}/usr/share/package-licenses/JAGS/src_modules_glm_SSparse_CHOLMOD_MatrixOps_License.txt
-cp src/modules/glm/SSparse/CHOLMOD/MatrixOps/gpl.txt %{buildroot}/usr/share/package-licenses/JAGS/src_modules_glm_SSparse_CHOLMOD_MatrixOps_gpl.txt
-cp src/modules/glm/SSparse/CHOLMOD/Modify/License.txt %{buildroot}/usr/share/package-licenses/JAGS/src_modules_glm_SSparse_CHOLMOD_Modify_License.txt
-cp src/modules/glm/SSparse/CHOLMOD/Modify/gpl.txt %{buildroot}/usr/share/package-licenses/JAGS/src_modules_glm_SSparse_CHOLMOD_Modify_gpl.txt
-cp src/modules/glm/SSparse/CHOLMOD/Supernodal/License.txt %{buildroot}/usr/share/package-licenses/JAGS/src_modules_glm_SSparse_CHOLMOD_Supernodal_License.txt
-cp src/modules/glm/SSparse/CHOLMOD/Supernodal/gpl.txt %{buildroot}/usr/share/package-licenses/JAGS/src_modules_glm_SSparse_CHOLMOD_Supernodal_gpl.txt
+cp %{_builddir}/JAGS-4.3.0/COPYING %{buildroot}/usr/share/package-licenses/JAGS/dfac199a7539a404407098a2541b9482279f690d
+cp %{_builddir}/JAGS-4.3.0/libltdl/COPYING.LIB %{buildroot}/usr/share/package-licenses/JAGS/01a6b4bf79aca9b556822601186afab86e8c4fbf
+cp %{_builddir}/JAGS-4.3.0/src/modules/glm/SSparse/CHOLMOD/Check/License.txt %{buildroot}/usr/share/package-licenses/JAGS/48845658ed992fd2d47c03f02fb9e83ad2d8ec5c
+cp %{_builddir}/JAGS-4.3.0/src/modules/glm/SSparse/CHOLMOD/Cholesky/License.txt %{buildroot}/usr/share/package-licenses/JAGS/18e4b92f8b5bb3a9b5408d47f4a59b50298ae7da
+cp %{_builddir}/JAGS-4.3.0/src/modules/glm/SSparse/CHOLMOD/Core/License.txt %{buildroot}/usr/share/package-licenses/JAGS/1fc53f4586ffafe736eb04c1e1b2a95bceb8ab16
+cp %{_builddir}/JAGS-4.3.0/src/modules/glm/SSparse/CHOLMOD/MatrixOps/License.txt %{buildroot}/usr/share/package-licenses/JAGS/dcac57a2e605d2d48a6c0407b554df52c789c775
+cp %{_builddir}/JAGS-4.3.0/src/modules/glm/SSparse/CHOLMOD/MatrixOps/gpl.txt %{buildroot}/usr/share/package-licenses/JAGS/b47456e2c1f38c40346ff00db976a2badf36b5e3
+cp %{_builddir}/JAGS-4.3.0/src/modules/glm/SSparse/CHOLMOD/Modify/License.txt %{buildroot}/usr/share/package-licenses/JAGS/09fbbba8d9fc4047b258e25802df5c8165fb4568
+cp %{_builddir}/JAGS-4.3.0/src/modules/glm/SSparse/CHOLMOD/Modify/gpl.txt %{buildroot}/usr/share/package-licenses/JAGS/b47456e2c1f38c40346ff00db976a2badf36b5e3
+cp %{_builddir}/JAGS-4.3.0/src/modules/glm/SSparse/CHOLMOD/Supernodal/License.txt %{buildroot}/usr/share/package-licenses/JAGS/b66cd486d18d54d13a6297b67019578ddea13ce2
+cp %{_builddir}/JAGS-4.3.0/src/modules/glm/SSparse/CHOLMOD/Supernodal/gpl.txt %{buildroot}/usr/share/package-licenses/JAGS/b47456e2c1f38c40346ff00db976a2badf36b5e3
 %make_install
 
 %files
@@ -255,17 +251,15 @@ cp src/modules/glm/SSparse/CHOLMOD/Supernodal/gpl.txt %{buildroot}/usr/share/pac
 
 %files license
 %defattr(0644,root,root,0755)
-/usr/share/package-licenses/JAGS/COPYING
-/usr/share/package-licenses/JAGS/libltdl_COPYING.LIB
-/usr/share/package-licenses/JAGS/src_modules_glm_SSparse_CHOLMOD_Check_License.txt
-/usr/share/package-licenses/JAGS/src_modules_glm_SSparse_CHOLMOD_Cholesky_License.txt
-/usr/share/package-licenses/JAGS/src_modules_glm_SSparse_CHOLMOD_Core_License.txt
-/usr/share/package-licenses/JAGS/src_modules_glm_SSparse_CHOLMOD_MatrixOps_License.txt
-/usr/share/package-licenses/JAGS/src_modules_glm_SSparse_CHOLMOD_MatrixOps_gpl.txt
-/usr/share/package-licenses/JAGS/src_modules_glm_SSparse_CHOLMOD_Modify_License.txt
-/usr/share/package-licenses/JAGS/src_modules_glm_SSparse_CHOLMOD_Modify_gpl.txt
-/usr/share/package-licenses/JAGS/src_modules_glm_SSparse_CHOLMOD_Supernodal_License.txt
-/usr/share/package-licenses/JAGS/src_modules_glm_SSparse_CHOLMOD_Supernodal_gpl.txt
+/usr/share/package-licenses/JAGS/01a6b4bf79aca9b556822601186afab86e8c4fbf
+/usr/share/package-licenses/JAGS/09fbbba8d9fc4047b258e25802df5c8165fb4568
+/usr/share/package-licenses/JAGS/18e4b92f8b5bb3a9b5408d47f4a59b50298ae7da
+/usr/share/package-licenses/JAGS/1fc53f4586ffafe736eb04c1e1b2a95bceb8ab16
+/usr/share/package-licenses/JAGS/48845658ed992fd2d47c03f02fb9e83ad2d8ec5c
+/usr/share/package-licenses/JAGS/b47456e2c1f38c40346ff00db976a2badf36b5e3
+/usr/share/package-licenses/JAGS/b66cd486d18d54d13a6297b67019578ddea13ce2
+/usr/share/package-licenses/JAGS/dcac57a2e605d2d48a6c0407b554df52c789c775
+/usr/share/package-licenses/JAGS/dfac199a7539a404407098a2541b9482279f690d
 
 %files man
 %defattr(0644,root,root,0755)

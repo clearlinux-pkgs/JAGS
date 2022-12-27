@@ -1,5 +1,5 @@
 PKG_NAME := JAGS
-URL = https://sourceforge.net/projects/mcmc-jags/files/JAGS/4.x/Source/JAGS-4.3.0.tar.gz
+URL = https://sourceforge.net/projects/mcmc-jags/files/JAGS/4.x/Source/JAGS-4.3.1.tar.gz
 ARCHIVES = 
 
 include ../common/Makefile.common
